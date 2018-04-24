@@ -30,6 +30,7 @@ Icon
 # Dependency directories
 node_modules
 jspm_packages
+screenshots
 
 # Thumbnails
 ._*
@@ -38,4 +39,10 @@ jspm_packages
 .Spotlight-V100
 .Trashes
 
+# credentials
+creds.js
 
+#Eclipse Project Files
+.jshintrc
+.project
+.settings

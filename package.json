@@ -1,0 +1,14 @@
+{
+  "name": "com.wolfgangjoebstl.javascript.puppeteer",
+  "version": "0.1.0",
+  "description": "Generated with Eclipse npm Tools",
+  "main": "test.ES7.js",
+  "scripts": {
+    "test": "echo 'Error: no test specified' && exit 1"
+  },
+  "author": "Wolfgang J�bstl",
+  "license": "ISC",
+  "devDependencies": {
+    "puppeteer": "^1.2.0"
+  }
+}
