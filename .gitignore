@@ -27,6 +27,9 @@ $RECYCLE.BIN/
 
 # Icon must ends with two \r.
 Icon
+# Dependency directories
+node_modules
+jspm_packages
 
 # Thumbnails
 ._*
@@ -35,11 +38,4 @@ Icon
 .Spotlight-V100
 .Trashes
 
-# node.js modules
-Puppeteer/node-modules/*
-Puppeteer/screenshots/*
-Puppeteer/node_modules/yauzl/index.js
-Puppeteer/node_modules/readable-stream/writable.js
-Puppeteer/node_modules/readable-stream/package.json
-Puppeteer/node_modules/readable-stream/passthrough.js
-Puppeteer/node_modules/readable-stream/LICENSE
+
