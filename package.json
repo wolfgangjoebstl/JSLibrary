@@ -1,5 +1,5 @@
 {
-  "name": "com.wolfgangjoebstl.javascript.puppeteer",
+  "name": "JSLibrary",
   "version": "0.1.0",
   "description": "Generated with Eclipse npm Tools",
   "main": "test.ES7.js",
@@ -9,6 +9,7 @@
   "author": "Wolfgang J�bstl",
   "license": "ISC",
   "devDependencies": {
-    "puppeteer": "^1.2.0"
+    "puppeteer": "^1.2.0",
+    "jayson": "*"
   }
 }
