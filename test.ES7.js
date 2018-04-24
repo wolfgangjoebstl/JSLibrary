@@ -9,7 +9,11 @@ const CREDS = require('./creds');		// eigentlich kein Modul, sondern nur Filezug
 const fs = require('fs');
 const jayson = require('jayson');
 
-/* abgeänderte Funktionen */
+/* 
+ * abgeänderte Funktionen 
+ * 
+ */
+
 const mkdirSync = function (dirPath) {
 	try {
 	    fs.mkdirSync(dirPath)
