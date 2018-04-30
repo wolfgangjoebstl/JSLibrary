@@ -3,11 +3,17 @@
  * 
  */
 
-/* notwendige Module */
+/* 
+ * notwendige Module 
+ * 
+ */
+
 const Puppeteer = require('puppeteer');
 const CREDS = require('./creds');		// eigentlich kein Modul, sondern nur Filezugriff
 const fs = require('fs');
 const jayson = require('jayson');
+var http = require('http');
+
 
 /* 
  * abgeänderte Funktionen 
@@ -27,9 +33,17 @@ const puppeteer = Puppeteer.launch({
     headless: false
 });
 
-/* Beginn des Programms */
+/* **********************************************************************************
+ * 
+ * Beginn des Programms 
+ * 
+ */
 
-/* Initialisierung */
+/* 
+ * Initialisierung 
+ * 
+ */
+
 console.log('Node version is: ' + process.version);
 console.log(require.resolve('puppeteer'));
 
@@ -62,14 +76,34 @@ console.log("Directory ready : "+status);
 /* Jetzt die eigentlichen asynchronen Engines, Routinen darstellen */
 
 
-//create a server
+//create a jayson server
 var server = jayson.server({
 add: function(args, callback) {
  callback(null, args[0] + args[1]);
 }
 });
 
-server.http().listen(3000);
+var serverresult = server.http().listen(3777);
+serverresult.on('error', function (e) {
+	  // Handle your error here
+	  console.log(e);
+	});
+
+//create a http server
+
+var serverhttp = http.createServer(function (req, res) {
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.end('Hello World!');
+}).listen(80);
+serverhttp.on('error', function (e) {
+	  // Handle your error here
+	  console.log(e);
+	});
+
+
+// crawl with chromium
+
+
 
 async function getPic() {	
   console.log('Launch Chromium'+'\n');

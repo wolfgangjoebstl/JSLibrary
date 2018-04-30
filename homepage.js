@@ -10,24 +10,33 @@ var dt = require('./mymodule');
 
 console.log('Node version is: ' + process.version);
 
-http.createServer(function (req, res) {
-	var q = url.parse(req.url, true);
+var serverhttp = http.createServer(function (request, response) {
+	var q = url.parse(request.url, true);
 	var filename = "." + q.pathname;
 	console.log("Url aufgerufen : " + filename)
 	fs.readFile('index.html', function(err, data) {
-		res.writeHead(200, {'Content-Type': 'text/html'});
-		res.write("The date and time are currently: " + dt.myDateTime() + "<br>");
-		res.write(req.url + "<br>");
-		var q = url.parse(req.url, true).query;
+		response.writeHead(200, {'Content-Type': 'text/html'});
+		response.write("The date and time are currently: " + dt.myDateTime() + "<br>");
+		response.write(request.url + "<br>");
+		var q = url.parse(request.url, true).query;
 		var txt = q.year + " " + q.month;
-		res.write(txt+"<br>");
-		res.write(data);
-		res.end('Hello World!'+ "<br>");
+		response.write(txt+"<br>");
+		response.write(data);
+		response.end('Hello World!'+ "<br>");
 	});	
-}).listen(8080);
+}).listen(3777);
 
-http.createServer(function (req, res) {
+serverhttp.on('error', function (e) {
+	  // Handle your error here
+	  console.log(e);
+	});
+
+var server2 = http.createServer(function (req, res) {
 	res.writeHead(200, {'Content-Type': 'text/html'});
 	res.end('Hello World!'+ "<br>");
-}).listen(5432);
+}).listen(5430);
 
+server2.on('error', function (e) {
+	  // Handle your error here
+	  console.log(e);
+	});
