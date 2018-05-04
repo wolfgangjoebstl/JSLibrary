@@ -9,9 +9,18 @@
  */
 
 const Puppeteer = require('puppeteer');
+
 const CREDS = require('./creds');		// eigentlich kein Modul, sondern nur Filezugriff
+
+var os = require('os');
 const fs = require('fs');
+const find = require('find-process');
+
 const jayson = require('jayson');
+var myParser = require('body-parser');
+var connect = require('connect');
+var express = require('express');
+
 var http = require('http');
 
 
@@ -39,7 +48,8 @@ const puppeteer = Puppeteer.launch({
  * 
  */
 
-/* 
+/* ==========================================================================
+ *  
  * Initialisierung 
  * 
  */
@@ -73,8 +83,15 @@ let status = fs.existsSync('./screenshots');
 // und hier noch nicht, andernfalls Callback hell :-)
 console.log("Directory ready : "+status);
 
-/* Jetzt die eigentlichen asynchronen Engines, Routinen darstellen */
+/* ================================================================================ 
+ * 
+ * 
+ * Jetzt die eigentlichen asynchronen Engines, Routinen darstellen 
+ * 
+ */
 
+//var app = connect();
+var app = express();
 
 //create a jayson server
 var server = jayson.server({
@@ -83,22 +100,71 @@ add: function(args, callback) {
 }
 });
 
-var serverresult = server.http().listen(3777);
+//parse request body before the jayson middleware
+//respond to all requests
+/*app.use(function(req, res){
+    console.log('=============================================================================================================');
+    console.log('Jayson Server request:');
+    console.log(req);
+    console.log('Jayson Server request received.');
+    console.log('=============================================================================================================');
+    const { headers, method, url } = req;
+    console.log(method + ' with ' + url);
+    console.log(headers);
+    //obj = JSON.parse(req);
+    //console.log(obj.count);    
+    res.end('Hello from Connect!\n');
+});*/
+
+app.use(myParser.json());
+app.use(myParser.urlencoded({extended : true}));
+	
+app.post("/api", function(request, response) {
+    const { headers, method, url } = request;
+    console.log(method + ' with ' + url);
+    console.log(headers);
+    console.log(request.body); //This prints the JSON document received (if it is a JSON document)
+    //var result = JSON.parse(request.body);
+    //console.log(result);
+    //response.send("You just called the post method at '/api'!\n");
+    response.json({id:request.body.id, result: "New movie created." });
+});
+
+app.get("/api", function(request, response) {
+    const { headers, method, url } = request;
+    console.log(method + ' with ' + url);
+    console.log(headers);
+    console.log(request.body); //This prints the JSON document received (if it is a JSON document)
+    response.send("You just called the get method at '/api'!\n");
+});
+
+app.listen(3777);
+
+
+/* var serverresult = server.http().listen(3777, function() {
+  console.log('Jayson Server listening on http://localhost:3777');
+}); 
+
 serverresult.on('error', function (e) {
 	  // Handle your error here
-	  console.log(e);
+	  console.log('Jayson Server error : ' + e);
 	});
+*/
 
 //create a http server
 
 var serverhttp = http.createServer(function (req, res) {
     res.writeHead(200, {'Content-Type': 'text/html'});
     res.end('Hello World!');
+    console.log('=============================================================================================================');
+    console.log('HTTP Server request received:');
+    console.log(req);
 }).listen(80);
 serverhttp.on('error', function (e) {
 	  // Handle your error here
-	  console.log(e);
+	  console.log('HTTP Server error ' + e);
 	});
+
 
 
 // crawl with chromium
@@ -153,7 +219,42 @@ async function getPic() {
   await browser.close();
 };
 
-getPic();
+/* ================================================================================ 
+ * 
+ * und die Routinen die eine nach der anderen abgearbeitet werden
+ */
+
+//getPic();
+
+var findtag="node";
+find('name', findtag)
+  .then(function (list) {
+    console.log('there are %s process(es) with '+findtag+' in name.', list.length);
+    console.log(list);
+  })
+
+var ifaces = os.networkInterfaces();
+
+Object.keys(ifaces).forEach(function (ifname) {
+  var alias = 0;
+
+  ifaces[ifname].forEach(function (iface) {
+    if ('IPv4' !== iface.family || iface.internal !== false) {
+      // skip over internal (i.e. 127.0.0.1) and non-ipv4 addresses
+      return;
+    }
+
+    if (alias >= 1) {
+      // this single interface has multiple ipv4 addresses
+      console.log(ifname + ':' + alias, iface.address);
+    } else {
+      // this interface has only one ipv4 adress
+      console.log(ifname, iface.address);
+    }
+    ++alias;
+  });
+}); 
+
 
 
 
